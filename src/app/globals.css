@@ -1,26 +1,519 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Near-monochrome palette */
+  --ink: #0a0a0c;
+  --bone: #f2f1ec;
+  --muted: #75757c;
+  --line-text: #c7c6c0;
+  --hairline: rgba(242, 241, 236, 0.12);
+  /* Timeline scroll progress (0–1), written by JS; read by the desktop
+     rail fill and the mobile left-edge bar. */
+  --progress: 0;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-bone: var(--bone);
+  --color-muted: var(--muted);
+  --font-archivo: var(--font-archivo);
+  --font-mono: var(--font-space-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Hero layout ---------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: clamp(20px, 3.2vw, 38px);
+}
+
+.hero-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.hero-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(18px, 2.4vw, 30px);
+}
+
+.hero-kicker {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 1vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+  margin: 0;
+  /* nudge for the wide tracking so it stays optically centered */
+  padding-left: 0.34em;
+}
+
+.hero-name {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  font-size: clamp(4rem, 19vw, 15rem);
+  color: var(--bone);
+}
+
+/* Mask that clips each rising letter */
+.reveal-row {
+  display: block;
+  overflow: hidden;
+  /* padding keeps tall glyphs from clipping while masking the rise */
+  padding: 0.06em 0.02em;
+  margin: -0.06em 0;
+}
+
+.hero-lede {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(15px, 1.55vw, 19px);
+  line-height: 1.45;
+  color: var(--line-text);
+}
+
+.hero-bottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ---------- Hero motion ---------- */
+
+/* Letters rise from below an overflow-hidden mask */
+@keyframes letterRise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Supporting elements fade up into place */
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* A highlight that sweeps across the bottom cue bar */
+@keyframes swipe {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+.letter {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: letterRise 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-delay: var(--delay, 0ms);
+  will-change: transform;
+}
+
+.fade-rise {
+  opacity: 0;
+  animation: fadeRise 0.9s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-delay: var(--delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.swipe-bar {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  overflow: hidden;
+  background: var(--hairline);
+}
+
+.swipe-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: var(--bone);
+  animation: swipe 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter,
+  .fade-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .swipe-bar::after {
+    animation: none;
+  }
+}
+
+/* ===================== Story / Timeline ===================== */
+
+.story {
+  position: relative;
+}
+
+/* ---- Intro ---- */
+.story-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100svh;
+  padding: clamp(30px, 6vw, 110px);
+  gap: clamp(20px, 3vw, 34px);
+}
+
+.story-eyebrow {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 1vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+}
+
+.story-headline {
+  margin: 0;
+  max-width: 16ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 8vw, 6.5rem);
+  color: var(--bone);
+}
+
+.story-scroll {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ---- Timeline block: rail + chapters ---- */
+.tl-block {
+  display: grid;
+  grid-template-columns: clamp(86px, 15vw, 200px) 1fr;
+}
+
+.tl-rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--hairline);
+}
+
+.tl-rail-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 30px);
+  perspective: 600px;
+}
+
+.tl-year {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.1rem, 2.4vw, 1.9rem);
+  letter-spacing: -0.01em;
+  color: var(--bone);
+  line-height: 1;
+  animation: yearFlip 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+  transform-origin: center bottom;
+}
+
+.tl-track {
+  position: relative;
+  width: 2px;
+  height: 34vh;
+  background: var(--hairline);
+}
+
+.tl-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--bone);
+  transform-origin: top center;
+  transform: scaleY(var(--progress, 0));
+}
+
+.tl-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bone);
+  transform: translate(-50%, calc((34vh - 8px) * var(--progress, 0)));
+}
+
+/* ---- Chapters ---- */
+.tl-chapter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: clamp(30px, 6vw, 110px);
+  gap: clamp(18px, 2.4vw, 30px);
+}
+
+.tl-index {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 1vw, 13px);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.tl-name {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 9vw, 7rem);
+  color: var(--bone);
+}
+
+.tl-desc {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(15px, 1.55vw, 19px);
+  line-height: 1.5;
+  color: var(--line-text);
+}
+
+.tl-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.95vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.tl-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bone);
+  flex: none;
+}
+
+/* ---- Closer ---- */
+.story-closer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  padding: clamp(30px, 6vw, 110px);
+  border-top: 1px solid var(--hairline);
+}
+
+.story-closer-head {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 7vw, 5.5rem);
+  color: var(--bone);
+  text-align: center;
+}
+
+/* ---- Shared masked-line + reveal mechanics (scroll-triggered) ---- */
+.tl-mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.1em 0.03em;
+  margin: -0.1em 0;
+}
+
+.tl-line {
+  display: block;
+  transform: translateY(116%);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: var(--d, 0s);
+  will-change: transform;
+}
+
+.in-view .tl-line {
+  transform: translateY(0);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: var(--d, 0s);
+  will-change: transform, opacity;
+}
+
+.in-view .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes yearFlip {
+  from {
+    opacity: 0;
+    transform: rotateX(-90deg) translateY(0.25em);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0) translateY(0);
+  }
+}
+
+/* Mobile-only left-edge progress bar — hidden on desktop. */
+.tl-edge {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-line {
+    transform: none;
+    transition: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tl-year {
+    animation: none;
+  }
+  .tl-fill,
+  .tl-edge-fill {
+    transform: scaleY(1);
+  }
+}
+
+/* ===================== Timeline — mobile (<= 640px) ===================== */
+@media (max-width: 640px) {
+  /* Single column: chapters get the full width. */
+  .tl-block {
+    grid-template-columns: 1fr;
+  }
+
+  /* Replace the sidebar rail with a slim fixed bar on the screen's edge. */
+  .tl-rail {
+    display: none;
+  }
+
+  .tl-edge {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: 3px;
+    height: 100vh;
+    height: 100svh;
+    background: var(--hairline);
+    pointer-events: none;
+  }
+
+  .tl-edge-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--bone);
+    transform-origin: top center;
+    transform: scaleY(var(--progress, 0));
+  }
+
+  /* Comfortable horizontal padding; vertical clamp from the base rule stays. */
+  .story-intro,
+  .tl-chapter,
+  .story-closer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Tune display type so the longest tokens (STHLMACTIVE, SOFTWARE) fit
+     cleanly within 24px gutters — verified down to 320px wide. */
+  .tl-name {
+    font-size: clamp(1.9rem, 10.5vw, 3.4rem);
+  }
+
+  .story-headline {
+    font-size: clamp(2rem, 10.5vw, 3.4rem);
+  }
+
+  .story-closer-head {
+    font-size: clamp(1.75rem, 9.5vw, 3rem);
+  }
+
+  /* Safety net: no horizontal scroll on phones. Scoped to mobile so it
+     never interferes with the desktop sticky rail. */
+  body {
+    overflow-x: hidden;
+  }
 }
