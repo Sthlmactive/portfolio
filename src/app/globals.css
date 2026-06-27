@@ -517,3 +517,82 @@ body {
     overflow-x: hidden;
   }
 }
+
+/* ===================== Loader wipe (intro) ===================== */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform;
+}
+
+/* The curtain slides up and out, revealing the hero beneath. */
+.loader--wipe {
+  transform: translateY(-101%);
+}
+
+/* "OSKAR TANG" rises out of an overflow-hidden mask. */
+.loader-mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.04em;
+  margin: -0.12em 0;
+}
+
+.loader-line {
+  display: block;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-size: clamp(2.2rem, 9vw, 5.5rem);
+  color: var(--bone);
+  transform: translateY(110%);
+  animation: letterRise 0.95s cubic-bezier(0.19, 1, 0.22, 1) 0.15s both;
+}
+
+.loader-foot {
+  position: absolute;
+  bottom: clamp(20px, 3.2vw, 38px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  animation: fadeRise 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.45s both;
+}
+
+/* Hidden before paint on loads where the loader is skipped. */
+html.loader-done .loader {
+  display: none;
+}
+
+/* Hold the hero hidden until the curtain lifts (hero-revealed is added by
+   the loader at the wipe moment, or pre-paint when the loader is skipped). */
+.letter,
+.fade-rise {
+  animation-play-state: paused;
+}
+
+html.hero-revealed .letter,
+html.hero-revealed .fade-rise {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-line,
+  .loader-foot {
+    animation: none;
+    transform: none;
+  }
+}
