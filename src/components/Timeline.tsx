@@ -19,7 +19,7 @@ const CHAPTERS: Chapter[] = [
   {
     index: "01 — 2026 → now",
     lines: ["BACKING", "NORDICS"],
-    desc: "An AI procurement agent for Nordic SMEs. Enterprise buying power — without the purchasing department.",
+    desc: "An AI procurement agent for Nordic SMEs. Making enterprise advantages available without being an enterprise.",
     status: "Live in production",
     year: "2026",
     link: {
@@ -37,8 +37,8 @@ const CHAPTERS: Chapter[] = [
   {
     index: "03 — Since 2024",
     lines: ["STHLMACTIVE"],
-    desc: "A private network for Sweden's CEOs and founders under 30. Where they meet, solve problems, and build together.",
-    status: "Active · Invite-only",
+    desc: "A network for Sweden's CEOs and founders under 30. Where they meet, solve problems, and build together.",
+    status: "Live",
     year: "2024",
     link: {
       href: "https://www.sthlmactive.se",
