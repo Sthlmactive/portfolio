@@ -43,6 +43,7 @@ const REVEAL_DELAYS = { index: 0.25, desc: 0.37, status: 0.49 };
 
 export default function Timeline() {
   const blockRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
   const chapterRefs = useRef<(HTMLElement | null)[]>([]);
   const closerRef = useRef<HTMLElement>(null);
   const [activeYear, setActiveYear] = useState(CHAPTERS[0].year);
@@ -50,6 +51,7 @@ export default function Timeline() {
   // Reveal sections as they scroll into view (one-shot).
   useEffect(() => {
     const targets = [
+      introRef.current,
       ...chapterRefs.current.filter(Boolean),
       closerRef.current,
     ].filter(Boolean) as HTMLElement[];
@@ -128,10 +130,16 @@ export default function Timeline() {
       </div>
 
       {/* Intro */}
-      <div className="story-intro">
+      <div className="story-intro" ref={introRef}>
         <p className="story-eyebrow">The story so far</p>
         <h2 className="story-headline">
-          From a sales seat to a software stack.
+          {["Freelanced.", "Sold.", "Built.", "Now scaling."].map((line, i) => (
+            <span className="tl-mask" key={i}>
+              <span className="tl-line" style={d(i * 0.09)}>
+                {line}
+              </span>
+            </span>
+          ))}
         </h2>
         <div className="story-scroll">
           <span className="swipe-bar" aria-hidden="true" />
