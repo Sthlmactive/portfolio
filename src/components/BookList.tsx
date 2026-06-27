@@ -5,7 +5,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 type Book = { n: string; title: string; author: string; desc: string };
 
 const BOOKS: Book[] = [
-  { n: "01", title: "Zero to One", author: "Peter Thiel", desc: "Why building something new beats cting on something old." },
+  { n: "01", title: "Zero to One", author: "Peter Thiel", desc: "Why building something new beats copying what already works." },
   { n: "02", title: "$100M Offers", author: "Alex Hormozi", desc: "How to build offers people can't say no to." },
   { n: "03", title: "The Dichotomy of Leadership", author: "Willink & Babin", desc: "Balancing the opposing forces of leading well." },
   { n: "04", title: "Meditations", author: "Marcus Aurelius", desc: "A Roman emperor's private notes on staying grounded." },

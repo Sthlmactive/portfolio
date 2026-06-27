@@ -494,6 +494,31 @@ body {
   color: var(--muted);
 }
 
+/* Quiet, translucent "stack" footnote */
+.about-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 62ch;
+}
+
+.about-stack-label {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.95vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.about-stack-list {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: clamp(13px, 1.3vw, 15px);
+  line-height: 1.7;
+  color: rgba(242, 241, 236, 0.35);
+}
+
 /* ---- Shared masked-line + reveal mechanics (scroll-triggered) ---- */
 .tl-mask {
   display: block;

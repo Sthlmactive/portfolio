@@ -12,7 +12,27 @@ const PARAGRAPHS = [
   "So I built BackingNordics to fix it. Everything since has been in service of that. Early, fast, still figuring it out.",
 ];
 
-const META = "Stockholm · Solo founder · B2B · AI-native";
+const META = "Stockholm · Founder";
+
+const STACK = [
+  "Claude Code",
+  "Codex",
+  "Cursor",
+  "Zapier",
+  "Apify",
+  "Sentry",
+  "Supabase",
+  "Vercel",
+  "Next.js",
+  "Make",
+  "Loops",
+  "Seedance",
+  "Wispr Flow",
+  "Claude",
+  "ElevenLabs",
+  "Canva",
+  "and more",
+];
 
 export default function About() {
   const ref = useRef<HTMLElement>(null);
@@ -61,7 +81,12 @@ export default function About() {
         ))}
       </div>
 
-      <p className="about-meta reveal" style={d(0.56)}>
+      <div className="about-stack reveal" style={d(0.56)}>
+        <p className="about-stack-label">Stack for building</p>
+        <p className="about-stack-list">{STACK.join(" · ")}</p>
+      </div>
+
+      <p className="about-meta reveal" style={d(0.68)}>
         {META}
       </p>
     </section>
