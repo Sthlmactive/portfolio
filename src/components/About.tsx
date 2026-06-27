@@ -38,7 +38,7 @@ export default function About() {
   }, []);
 
   return (
-    <section className="about" aria-label="About" ref={ref}>
+    <section id="about" className="about" aria-label="About" ref={ref}>
       <p className="about-eyebrow reveal" style={d(0.22)}>
         About
       </p>

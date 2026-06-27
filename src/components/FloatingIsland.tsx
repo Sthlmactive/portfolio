@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookingModal from "@/components/BookingModal";
 
 export default function FloatingIsland() {
   const [open, setOpen] = useState(false);
+
+  // Let other components (e.g. the header's "Contact" link) open the modal.
+  useEffect(() => {
+    const openModal = () => setOpen(true);
+    window.addEventListener("oskar:open-booking", openModal);
+    return () => window.removeEventListener("oskar:open-booking", openModal);
+  }, []);
 
   return (
     <>

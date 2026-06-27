@@ -30,12 +30,6 @@ function RevealWord({ word, startIndex }: { word: string; startIndex: number }) 
 export default function Hero() {
   return (
     <section className="hero">
-      {/* Top bar */}
-      <header className="hero-topbar fade-rise" style={delay(0.7)}>
-        <span>Portfolio — 2026</span>
-        <span>Stockholm, SE</span>
-      </header>
-
       {/* Center */}
       <div className="hero-center">
         <p className="hero-kicker fade-rise" style={delay(0.85)}>
@@ -48,8 +42,7 @@ export default function Hero() {
         </h1>
 
         <p className="hero-lede fade-rise" style={delay(1.0)}>
-          I build B2B products that ship — solo, fast, from positioning to
-          production.
+          Validate. Build. Scale.
         </p>
       </div>
 

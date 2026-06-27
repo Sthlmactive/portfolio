@@ -11,6 +11,7 @@ type Chapter = {
   desc: string;
   status: string;
   year: string;
+  link?: { href: string; text: string };
 };
 
 // Newest first.
@@ -21,20 +22,28 @@ const CHAPTERS: Chapter[] = [
     desc: "An AI procurement agent for Nordic SMEs. Enterprise buying power — without the purchasing department.",
     status: "Live in production",
     year: "2026",
+    link: {
+      href: "https://www.backingnordics.com",
+      text: "www.backingnordics.com",
+    },
   },
   {
     index: "02 — 2026",
     lines: ["GTM", "ENGINEER"],
-    desc: "An AI sales platform that kills the admin — prospecting, enrichment, and outreach on autopilot, so sellers actually sell.",
-    status: "Live · Gmail + Outlook",
+    desc: "An AI sales platform that killed our admin work. It prospects, enriches, and runs outreach on autopilot, reading public market signals to reach companies the moment they're a fit.",
+    status: "Live · Internal Use",
     year: "2026",
   },
   {
     index: "03 — Since 2024",
     lines: ["STHLMACTIVE"],
-    desc: "A private network for Sweden's CEOs and founders under 30 — distribution starts with the room you're in.",
+    desc: "A private network for Sweden's CEOs and founders under 30. Where they meet, solve problems, and build together.",
     status: "Active · Invite-only",
     year: "2024",
+    link: {
+      href: "https://www.sthlmactive.se",
+      text: "www.sthlmactive.se",
+    },
   },
   {
     index: "04 — 2024",
@@ -147,7 +156,7 @@ export default function Timeline() {
   }, []);
 
   return (
-    <section className="story" aria-label="Story">
+    <section id="story" className="story" aria-label="Story">
       {/* Mobile-only fixed progress bar on the left screen edge */}
       <div className="tl-edge" aria-hidden="true">
         <span className="tl-edge-fill" />
@@ -220,6 +229,17 @@ export default function Timeline() {
               <p className="tl-desc reveal" style={d(REVEAL_DELAYS.desc)}>
                 {ch.desc}
               </p>
+              {ch.link && (
+                <p className="tl-link reveal" style={d(0.43)}>
+                  <a
+                    href={ch.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {ch.link.text}
+                  </a>
+                </p>
+              )}
               <p className="tl-status reveal" style={d(REVEAL_DELAYS.status)}>
                 <span className="tl-status-dot" aria-hidden="true" />
                 {ch.status}
