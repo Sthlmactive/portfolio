@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import { registerLenis } from "@/lib/smoothScroll";
 
 // Initializes Lenis once for the whole page. Disabled when the user
 // prefers reduced motion (native scroll takes over).
@@ -20,6 +21,8 @@ export default function SmoothScroll() {
       easing: (t) => 1 - Math.pow(1 - t, 3),
     });
 
+    registerLenis(lenis);
+
     let rafId = 0;
     const raf = (time: number) => {
       lenis.raf(time);
@@ -30,6 +33,7 @@ export default function SmoothScroll() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      registerLenis(null);
     };
   }, []);
 

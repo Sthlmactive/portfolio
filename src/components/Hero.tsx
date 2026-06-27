@@ -39,7 +39,7 @@ export default function Hero() {
       {/* Center */}
       <div className="hero-center">
         <p className="hero-kicker fade-rise" style={delay(0.85)}>
-          Founder · Builder · 20
+          Founder · Builder · 21
         </p>
 
         <h1 className="hero-name">

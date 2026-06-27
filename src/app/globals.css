@@ -3,6 +3,7 @@
 :root {
   /* Near-monochrome palette */
   --ink: #0a0a0c;
+  --panel: #131419;
   --bone: #f2f1ec;
   --muted: #75757c;
   --line-text: #c7c6c0;
@@ -281,7 +282,7 @@ body {
 .tl-track {
   position: relative;
   width: 2px;
-  height: 34vh;
+  height: 42vh;
   background: var(--hairline);
 }
 
@@ -293,15 +294,40 @@ body {
   transform: scaleY(var(--progress, 0));
 }
 
+/* Checkpoint dots — one per chapter, centered on the line. */
+.tl-checkpoint {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(242, 241, 236, 0.2);
+  transform: translate(-50%, -50%);
+  transition:
+    background 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.tl-checkpoint.lit {
+  background: var(--bone);
+  transform: translate(-50%, -50%) scale(1.35);
+}
+
+/* Moving position indicator — a hollow ring, distinct from the solid dots. */
 .tl-dot {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 8px;
-  height: 8px;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
   border-radius: 50%;
-  background: var(--bone);
-  transform: translate(-50%, calc((34vh - 8px) * var(--progress, 0)));
+  background: var(--ink);
+  border: 1.5px solid var(--bone);
+  transform: translateX(-50%) translateY(calc(42vh * var(--progress, 0)))
+    translateY(-50%);
 }
 
 /* ---- Chapters ---- */
@@ -376,6 +402,7 @@ body {
 
 .story-closer-head {
   margin: 0;
+  max-width: 15ch;
   font-family: var(--font-archivo), system-ui, sans-serif;
   font-weight: 900;
   line-height: 0.9;
@@ -383,6 +410,63 @@ body {
   font-size: clamp(2rem, 7vw, 5.5rem);
   color: var(--bone);
   text-align: center;
+  text-wrap: balance;
+}
+
+/* ===================== About ===================== */
+
+.about {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: clamp(30px, 6vw, 110px);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.about-eyebrow {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 1vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+}
+
+.about-headline {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.2rem, 7vw, 5.5rem);
+  color: var(--bone);
+}
+
+.about-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.5vw, 20px);
+  max-width: 46ch;
+}
+
+.about-p {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.7vw, 21px);
+  line-height: 1.6;
+  color: var(--line-text);
+}
+
+.about-meta {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.95vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
 }
 
 /* ---- Shared masked-line + reveal mechanics (scroll-triggered) ---- */
@@ -453,6 +537,12 @@ body {
   .tl-edge-fill {
     transform: scaleY(1);
   }
+  /* All checkpoints shown lit, no transitions. */
+  .tl-checkpoint {
+    background: var(--bone);
+    transform: translate(-50%, -50%) scale(1.35);
+    transition: none;
+  }
 }
 
 /* ===================== Timeline — mobile (<= 640px) ===================== */
@@ -492,7 +582,8 @@ body {
   /* Comfortable horizontal padding; vertical clamp from the base rule stays. */
   .story-intro,
   .tl-chapter,
-  .story-closer {
+  .story-closer,
+  .about {
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -593,6 +684,428 @@ html.hero-revealed .fade-rise {
   .loader-line,
   .loader-foot {
     animation: none;
+    transform: none;
+  }
+}
+
+/* ===================== Floating island ===================== */
+
+.island-wrap {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+}
+
+.island {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 9px 9px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: rgba(19, 20, 25, 0.72);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 50px rgba(0, 0, 0, 0.55);
+  animation: islandIn 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.4s both;
+  will-change: transform, opacity;
+}
+
+@keyframes islandIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.island-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.island-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bone);
+  box-shadow: 0 0 0 0 rgba(242, 241, 236, 0.45);
+  animation: islandPulse 2.4s ease-out infinite;
+  flex: none;
+}
+
+@keyframes islandPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(242, 241, 236, 0.4);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px rgba(242, 241, 236, 0);
+  }
+}
+
+.island-btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 11px 20px;
+  border-radius: 999px;
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  transition:
+    transform 0.25s cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 0.25s ease;
+}
+
+.island-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+}
+
+.island-btn:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .island-wrap {
+    left: 14px;
+    right: 14px;
+    transform: none;
+  }
+  .island {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .island-status-text {
+    display: none;
+  }
+}
+
+/* ===================== Booking modal ===================== */
+
+.booking-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5, 5, 7, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.booking-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s;
+}
+
+.booking-card {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow: auto;
+  padding: clamp(24px, 4vw, 38px);
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+  transform: translateY(22px) scale(0.985);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.booking-overlay.is-open .booking-card {
+  transform: translateY(0) scale(1);
+}
+
+.booking-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.booking-close:hover {
+  color: var(--bone);
+  border-color: rgba(242, 241, 236, 0.3);
+  background: rgba(242, 241, 236, 0.04);
+}
+
+.booking-kicker {
+  margin: 0 0 14px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+}
+
+.booking-title {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: var(--bone);
+}
+
+.booking-sub {
+  margin: 12px 0 0;
+  max-width: 42ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--line-text);
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.booking-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.booking-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.booking-field label,
+.booking-grouplabel {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.booking-field label span {
+  color: var(--bone);
+}
+
+/* "I'm reaching out as" segmented radiogroup */
+.booking-segment {
+  display: flex;
+  gap: 8px;
+}
+
+.booking-pill {
+  flex: 1;
+  appearance: none;
+  cursor: pointer;
+  padding: 11px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.booking-pill:hover {
+  color: var(--bone);
+  border-color: rgba(242, 241, 236, 0.3);
+}
+
+.booking-pill.is-selected {
+  background: var(--bone);
+  color: var(--ink);
+  border-color: var(--bone);
+}
+
+.booking-pill:focus-visible {
+  outline: 2px solid var(--bone);
+  outline-offset: 2px;
+}
+
+.booking-field input,
+.booking-field textarea {
+  width: 100%;
+  appearance: none;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 15px;
+  color: var(--bone);
+  background: rgba(242, 241, 236, 0.04);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.booking-field textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+
+.booking-field input::placeholder,
+.booking-field textarea::placeholder {
+  color: var(--muted);
+}
+
+.booking-field input:focus,
+.booking-field textarea:focus {
+  outline: none;
+  border-color: rgba(242, 241, 236, 0.35);
+  background: rgba(242, 241, 236, 0.07);
+}
+
+/* Visually-hidden honeypot */
+.booking-hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.booking-error {
+  margin: 0;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #e7b4b0;
+}
+
+.booking-submit {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition:
+    transform 0.2s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.2s ease;
+}
+
+.booking-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.booking-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Success view */
+.booking-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 18px 0 6px;
+  gap: 14px;
+}
+
+.booking-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 241, 236, 0.3);
+  color: var(--bone);
+}
+
+.booking-success .booking-title {
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+}
+
+.booking-success .booking-sub {
+  margin-top: 0;
+}
+
+@media (max-width: 460px) {
+  .booking-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island {
+    animation: none;
+  }
+  .island-dot {
+    animation: none;
+  }
+  .island-btn,
+  .booking-submit,
+  .booking-card,
+  .booking-overlay {
+    transition: none;
+  }
+  .booking-card {
     transform: none;
   }
 }

@@ -3,6 +3,7 @@ import { Archivo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Loader from "@/components/Loader";
+import FloatingIsland from "@/components/FloatingIsland";
 
 // Runs before first paint: skip the loader (and reveal the hero immediately)
 // when it has already played this session, or when reduced motion is preferred.
@@ -47,6 +48,7 @@ export default function RootLayout({
         <Loader />
         <SmoothScroll />
         {children}
+        <FloatingIsland />
       </body>
     </html>
   );

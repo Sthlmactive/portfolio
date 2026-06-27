@@ -36,15 +36,34 @@ const CHAPTERS: Chapter[] = [
     status: "Active · Invite-only",
     year: "2024",
   },
+  {
+    index: "04 — 2024",
+    lines: ["SALES"],
+    desc: "B2B & B2C sales.",
+    status: "B2B · B2C",
+    year: "2024",
+  },
+  {
+    index: "05 — Since 2023",
+    lines: ["FREELANCE"],
+    desc: "Where it all started — websites, automations, whatever needed building.",
+    status: "Self-taught",
+    year: "2023",
+  },
 ];
 
 // Supporting elements reveal after the name has masked up.
 const REVEAL_DELAYS = { index: 0.25, desc: 0.37, status: 0.49 };
 
+// One checkpoint per chapter, evenly spaced top→bottom. A dot lights up
+// once the rail scroll-progress passes its threshold.
+const CHECKPOINTS = [0, 0.25, 0.5, 0.75, 1];
+
 export default function Timeline() {
   const blockRef = useRef<HTMLDivElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const chapterRefs = useRef<(HTMLElement | null)[]>([]);
+  const checkpointRefs = useRef<(HTMLElement | null)[]>([]);
   const closerRef = useRef<HTMLElement>(null);
   const [activeYear, setActiveYear] = useState(CHAPTERS[0].year);
 
@@ -108,6 +127,11 @@ export default function Timeline() {
         "--progress",
         progress.toFixed(4),
       );
+      // Light each checkpoint once progress passes its threshold.
+      const dots = checkpointRefs.current;
+      for (let i = 0; i < dots.length; i++) {
+        dots[i]?.classList.toggle("lit", progress >= CHECKPOINTS[i]);
+      }
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -156,6 +180,16 @@ export default function Timeline() {
             </span>
             <span className="tl-track">
               <span className="tl-fill" />
+              {CHECKPOINTS.map((threshold, i) => (
+                <span
+                  key={i}
+                  ref={(el) => {
+                    checkpointRefs.current[i] = el;
+                  }}
+                  className="tl-checkpoint"
+                  style={{ top: `${threshold * 100}%` }}
+                />
+              ))}
               <span className="tl-dot" />
             </span>
           </div>
@@ -198,15 +232,9 @@ export default function Timeline() {
       {/* Closer */}
       <section className="story-closer" ref={closerRef}>
         <h2 className="story-closer-head">
-          {["Three products.", "One operator.", "Still building."].map(
-            (line, i) => (
-              <span className="tl-mask" key={i}>
-                <span className="tl-line" style={d(i * 0.09)}>
-                  {line}
-                </span>
-              </span>
-            ),
-          )}
+          <span className="tl-mask">
+            <span className="tl-line">Creating momentum to scale.</span>
+          </span>
         </h2>
       </section>
     </section>
