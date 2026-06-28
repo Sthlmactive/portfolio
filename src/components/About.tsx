@@ -5,7 +5,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 type DelayVar = CSSProperties & { "--d"?: string };
 const d = (seconds: number): DelayVar => ({ "--d": `${seconds}s` });
 
-const HEADLINE_LINES = ["Building, fast,", "from Stockholm."];
+const HEADLINE_LINES = ["Building,", "from Stockholm."];
 
 const PARAGRAPHS = [
   "I'm 21. I've been freelancing since 17 — websites, automations, whatever needed building. A sales job taught me how to close, and how much companies overpay along the way. Then I started Sthlmactive, my network for CEOs under 30. Everywhere I looked, the same problem: companies overpaying on procurement, with no one handling it.",
