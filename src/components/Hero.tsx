@@ -40,10 +40,6 @@ export default function Hero() {
           <RevealWord word="OSKAR" startIndex={0} />
           <RevealWord word="TANG" startIndex={5} />
         </h1>
-
-        <p className="hero-lede fade-rise" style={delay(1.0)}>
-          Validate. Build. Scale.
-        </p>
       </div>
 
       {/* Bottom cue */}

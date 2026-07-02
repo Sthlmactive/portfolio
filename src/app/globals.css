@@ -11,6 +11,12 @@
   /* Timeline scroll progress (0–1), written by JS; read by the desktop
      rail fill and the mobile left-edge bar. */
   --progress: 0;
+  /* Footprint of the fixed "Let's talk" island: ~54px pill + 22px bottom
+     offset, plus iOS safe-area and breathing room. The last section uses this
+     as bottom padding so its content scrolls clear of the island. */
+  --island-clearance: calc(
+    54px + 22px + 40px + env(safe-area-inset-bottom, 0px)
+  );
 }
 
 @theme inline {
@@ -91,16 +97,6 @@ body {
   /* padding keeps tall glyphs from clipping while masking the rise */
   padding: 0.06em 0.02em;
   margin: -0.06em 0;
-}
-
-.hero-lede {
-  margin: 0;
-  max-width: 34ch;
-  font-family: var(--font-archivo), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: clamp(15px, 1.55vw, 19px);
-  line-height: 1.45;
-  color: var(--line-text);
 }
 
 .hero-bottom {
@@ -447,6 +443,10 @@ body {
   min-height: 100svh;
   padding: clamp(30px, 6vw, 110px);
   gap: clamp(20px, 3vw, 32px);
+  /* Last section on the page: keep CONNECT + STOCKHOLM · FOUNDER clear of the
+     fixed floating island. Whichever is larger — the default clamp on wide
+     desktops or the island clearance on short/mobile viewports — wins. */
+  padding-bottom: max(clamp(30px, 6vw, 110px), var(--island-clearance));
 }
 
 .about-eyebrow {
@@ -517,6 +517,69 @@ body {
   font-size: clamp(13px, 1.3vw, 15px);
   line-height: 1.7;
   color: rgba(242, 241, 236, 0.35);
+}
+
+/* Connect chips — cold, premium outlined pills with a tactile hover. */
+.about-connect-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.connect-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(242, 241, 236, 0.12);
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.95vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  transition:
+    color 0.24s ease-out,
+    border-color 0.24s ease-out,
+    background-color 0.24s ease-out,
+    transform 0.24s ease-out;
+}
+
+.connect-chip-icon {
+  flex: none;
+  transition: transform 0.24s ease-out;
+}
+
+.connect-chip:hover,
+.connect-chip:focus-visible {
+  color: var(--bone);
+  border-color: rgba(242, 241, 236, 0.9);
+  background-color: rgba(242, 241, 236, 0.05);
+  transform: translateY(-2px);
+}
+
+.connect-chip:hover .connect-chip-icon,
+.connect-chip:focus-visible .connect-chip-icon {
+  transform: scale(1.08);
+}
+
+.connect-chip:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connect-chip,
+  .connect-chip:hover,
+  .connect-chip:focus-visible,
+  .connect-chip:active,
+  .connect-chip-icon,
+  .connect-chip:hover .connect-chip-icon,
+  .connect-chip:focus-visible .connect-chip-icon {
+    transform: none;
+  }
 }
 
 /* ---- Shared masked-line + reveal mechanics (scroll-triggered) ---- */
@@ -636,6 +699,12 @@ body {
   .about {
     padding-left: 24px;
     padding-right: 24px;
+  }
+
+  /* On mobile the island is a full-width bar and the section fills the screen,
+     so give the last rows extra room to scroll fully above it. */
+  .about {
+    padding-bottom: calc(var(--island-clearance) + 32px);
   }
 
   /* Tune display type so the longest tokens (STHLMACTIVE, SOFTWARE) fit
