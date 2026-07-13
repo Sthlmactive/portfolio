@@ -65,7 +65,10 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: clamp(18px, 2.4vw, 30px);
+  /* Tight cluster: this gap sits between eyebrow→headline→CTA. Kept small so
+     the CTA reads as part of the headline cluster (its own margin-top adds the
+     rest of the headline→CTA spacing). */
+  gap: 0.5rem;
 }
 
 .hero-kicker {
@@ -89,6 +92,131 @@ body {
   font-size: clamp(2rem, 4.4vw, 3.75rem);
   color: var(--bone);
   text-wrap: balance;
+}
+
+/* ---------- Hero email capture ---------- */
+
+/* No outer container — label above a centered input + button pair. */
+.hero-cta {
+  margin-top: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Explicit body sans — NOT mono. Guards against any inherited mono/tracking. */
+.hero-cta-label {
+  max-width: 30rem;
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* Translucent input box */
+.hero-cta-input {
+  width: 20rem;
+  height: 3rem;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  color: var(--bone);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  outline: none;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.hero-cta-input::placeholder {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-cta-input:focus {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Solid grey button beside the input (not bone/white) */
+.hero-cta-btn {
+  height: 3rem;
+  padding: 0 1.5rem;
+  background: rgba(255, 255, 255, 0.13);
+  border: none;
+  border-radius: 10px;
+  color: var(--bone);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hero-cta-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.hero-cta-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Plain centered text — swaps in for the row, matched height so no shift. */
+.hero-cta-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin: 0;
+  color: var(--bone);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.hero-cta-error {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #ff7a6b;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .hero-cta-row {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-input {
+    width: 100%;
+  }
+
+  .hero-cta-btn {
+    width: 100%;
+  }
 }
 
 .hero-bottom {

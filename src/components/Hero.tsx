@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import EmailCapture from "@/components/EmailCapture";
 
 type DelayStyle = CSSProperties & { "--delay": string };
 
@@ -12,12 +13,14 @@ export default function Hero() {
       {/* Center */}
       <div className="hero-center">
         <p className="hero-kicker fade-rise" style={delay(0.85)}>
-          Founder · Builder · 21
+          Founder · Stockholm · 21
         </p>
 
         <h1 className="hero-name fade-rise" style={delay(0.95)}>
           Building impact driven companies with a lot of cool people.
         </h1>
+
+        <EmailCapture delay={1.05} />
       </div>
 
       {/* Bottom cue */}
