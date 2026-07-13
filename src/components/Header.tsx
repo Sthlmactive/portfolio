@@ -11,6 +11,7 @@ import { lockScroll, unlockScroll } from "@/lib/smoothScroll";
 type NavLink = { label: string; href?: string; booking?: boolean };
 const LINKS: NavLink[] = [
   { label: "Story", href: "/#story" },
+  { label: "Builds", href: "/builds" },
   { label: "About", href: "/#about" },
   { label: "Books", href: "/books" },
   { label: "Contact", booking: true },

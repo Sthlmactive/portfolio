@@ -1,30 +1,9 @@
 import type { CSSProperties } from "react";
 
-// Letter reveal timing: OSKAR reveals first, then TANG continues the stagger.
-const LETTER_BASE_DELAY = 0.15; // seconds before the first letter rises
-const LETTER_STAGGER = 0.05; // ~50ms per letter
-
 type DelayStyle = CSSProperties & { "--delay": string };
 
 function delay(seconds: number): DelayStyle {
   return { "--delay": `${seconds}s` };
-}
-
-// Render a word as masked, individually-animated letters.
-function RevealWord({ word, startIndex }: { word: string; startIndex: number }) {
-  return (
-    <span className="reveal-row">
-      {word.split("").map((char, i) => (
-        <span
-          key={i}
-          className="letter"
-          style={delay(LETTER_BASE_DELAY + (startIndex + i) * LETTER_STAGGER)}
-        >
-          {char}
-        </span>
-      ))}
-    </span>
-  );
 }
 
 export default function Hero() {
@@ -36,9 +15,8 @@ export default function Hero() {
           Founder · Builder · 21
         </p>
 
-        <h1 className="hero-name">
-          <RevealWord word="OSKAR" startIndex={0} />
-          <RevealWord word="TANG" startIndex={5} />
+        <h1 className="hero-name fade-rise" style={delay(0.95)}>
+          Building impact driven companies with a lot of cool people.
         </h1>
       </div>
 

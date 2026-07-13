@@ -80,23 +80,15 @@ body {
 }
 
 .hero-name {
-  margin: 0;
+  margin: 0 auto;
+  max-width: 20ch;
   font-family: var(--font-archivo), system-ui, sans-serif;
   font-weight: 900;
-  text-transform: uppercase;
-  line-height: 0.82;
-  letter-spacing: -0.02em;
-  font-size: clamp(4rem, 19vw, 15rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-size: clamp(2rem, 4.4vw, 3.75rem);
   color: var(--bone);
-}
-
-/* Mask that clips each rising letter */
-.reveal-row {
-  display: block;
-  overflow: hidden;
-  /* padding keeps tall glyphs from clipping while masking the rise */
-  padding: 0.06em 0.02em;
-  margin: -0.06em 0;
+  text-wrap: balance;
 }
 
 .hero-bottom {
@@ -1560,5 +1552,386 @@ html.hero-revealed .fade-rise {
     transform: none;
     transition: none;
     transition-delay: 0s;
+  }
+}
+
+/* ===================== Builds page ===================== */
+
+.builds {
+  min-height: 100svh;
+  background: var(--ink);
+  padding: clamp(96px, 14vh, 150px) clamp(24px, 6vw, 110px)
+    clamp(64px, 10vh, 120px);
+  /* Keep the last row clear of the fixed AVAILABLE / LET'S TALK island. */
+  padding-bottom: max(clamp(64px, 10vh, 120px), var(--island-clearance));
+}
+
+.builds-head {
+  margin-bottom: clamp(34px, 6vw, 64px);
+}
+
+.builds-eyebrow {
+  margin: 0 0 clamp(16px, 2.4vw, 26px);
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 1vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+}
+
+.builds-title {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-size: clamp(3rem, 12vw, 7rem);
+  color: var(--bone);
+}
+
+.builds-sub {
+  margin: clamp(16px, 2.4vw, 24px) 0 0;
+  max-width: 46ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: clamp(16px, 1.7vw, 21px);
+  line-height: 1.55;
+  color: var(--line-text);
+}
+
+/* ---- Editorial index list ---- */
+.build-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+  /* Gap between the index column and the name column in the head row. The
+     reveal reuses (index width + this gap) to indent revealed content so it
+     starts at the same left edge as the project name. */
+  --build-col-gap: clamp(16px, 3vw, 40px);
+  --build-indent: calc(1rem + var(--build-col-gap));
+  /* Single knob for the teaser → description gap in the EXPANDED state. At rest
+     the head keeps its own padding-bottom; when a row is revealed this collapses
+     that padding so the description sits close under the teaser. Tune here. */
+  --build-reveal-gap: 1.5rem;
+}
+
+/* Each row is a thin-ruled band. A faint hover wash lightens the whole row. */
+.build-row {
+  border-bottom: 1px solid var(--hairline);
+  /* Scroll-in entrance (one-shot). */
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.7s cubic-bezier(0.19, 1, 0.22, 1),
+    background 0.35s ease;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+.build-row.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Resting row: index | name + teaser | status/year | arrow. */
+.build-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: baseline;
+  column-gap: var(--build-col-gap);
+  width: 100%;
+  margin: 0;
+  padding: clamp(22px, 3vw, 34px) 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  /* left-padding shift + bottom-padding collapse on reveal (see hover / open) */
+  transition: padding 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.build-index {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: color 0.25s ease;
+}
+
+.build-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.build-name {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  color: var(--line-text);
+  transition: color 0.25s ease;
+}
+
+.build-teaser {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.build-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.build-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.9vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.build-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+/* Monochrome status: brightness alone encodes state. */
+.build-status--live {
+  color: var(--bone);
+}
+.build-status--live .build-status-dot {
+  background: var(--bone);
+}
+
+.build-status--building .build-status-dot {
+  background: var(--muted);
+}
+
+.build-status--archived {
+  color: var(--muted);
+}
+.build-status--archived .build-status-dot {
+  background: rgba(242, 241, 236, 0.22);
+}
+
+.build-year {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.9vw, 12px);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* Arrow parks off to the right, slides in on reveal. */
+.build-arrow {
+  align-self: center;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(15px, 1.6vw, 19px);
+  color: var(--bone);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* ---- Revealed detail: description + stack + links ---- */
+/* grid-rows 0fr -> 1fr animates to auto height smoothly. */
+.build-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.4s ease;
+}
+
+.build-reveal-inner {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Even, comfortable gaps between description → tags → link/PRIVATE label. */
+  gap: 1.75rem;
+  /* Breathing room inside the revealed block so content never touches the
+     edges of the faint hover background. Left padding indents the content to
+     the name column; right padding keeps tags/links off the far edge. */
+  padding: 0 clamp(20px, 3vw, 32px) 1.6rem var(--build-indent);
+}
+
+.build-desc {
+  margin: 0;
+  max-width: 52ch;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.55;
+  color: var(--line-text);
+}
+
+.build-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.build-tag {
+  padding: 5px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(9px, 0.85vw, 11px);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.build-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.build-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.9vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bone);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 2px;
+  transition: border-color 0.25s ease;
+}
+
+.build-link:hover,
+.build-link:focus-visible {
+  border-bottom-color: var(--bone);
+}
+
+/* Non-clickable marker: repo exists, source is closed. No arrow, no underline. */
+.build-private {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-size: clamp(10px, 0.9vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+/* ---- Desktop: hover (and keyboard focus) drives the reveal ---- */
+@media (hover: hover) {
+  .build-row:hover,
+  .build-row:focus-within {
+    background: rgba(242, 241, 236, 0.025);
+  }
+
+  .build-row:hover .build-head,
+  .build-row:focus-within .build-head {
+    padding-left: clamp(10px, 1.4vw, 18px);
+    padding-bottom: var(--build-reveal-gap);
+  }
+
+  .build-row:hover .build-name,
+  .build-row:focus-within .build-name {
+    color: var(--bone);
+  }
+
+  .build-row:hover .build-index,
+  .build-row:focus-within .build-index {
+    color: var(--bone);
+  }
+
+  .build-row:hover .build-arrow,
+  .build-row:focus-within .build-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .build-row:hover .build-reveal,
+  .build-row:focus-within .build-reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+/* ---- Touch: tap toggles the open row (data-open set by JS) ---- */
+@media (hover: none) {
+  .build-arrow {
+    display: none;
+  }
+
+  .build-row[data-open] {
+    background: rgba(242, 241, 236, 0.025);
+  }
+
+  .build-row[data-open] .build-head {
+    padding-bottom: var(--build-reveal-gap);
+  }
+
+  .build-row[data-open] .build-name {
+    color: var(--bone);
+  }
+
+  .build-row[data-open] .build-index {
+    color: var(--bone);
+  }
+
+  .build-row[data-open] .build-reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Let name span the full width; drop status + year beneath it. */
+  .build-head {
+    grid-template-columns: auto 1fr;
+    row-gap: 14px;
+  }
+  .build-meta {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .build-row {
+    opacity: 1;
+    transform: none;
+    transition: background 0.2s ease;
+    transition-delay: 0s;
+  }
+  .build-head,
+  .build-name,
+  .build-index,
+  .build-arrow,
+  .build-reveal {
+    transition: none;
   }
 }
