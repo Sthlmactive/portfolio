@@ -26,6 +26,11 @@ type Build = {
   stack: string[];
   year: string;
   status: BuildStatus;
+  // Optional display override for the status label. Color, dot, and casing still
+  // come from `status` — this only changes the visible text (e.g. a "LIVE" build
+  // that also wants to note "INTERNAL USE"). Keep it short; it must fit the
+  // right-hand status column without shoving the year out of alignment.
+  statusLabel?: string;
   links: BuildLink[];
   repo?: "public" | "private";
 };
@@ -60,6 +65,17 @@ const BUILDS: Build[] = [
     stack: ["NEXT.JS", "PYTHON", "AUTOMATIONS"],
     year: "2026",
     status: "BUILDING",
+    links: [],
+  },
+  {
+    name: "Content.io",
+    teaser: "Kill the search for viral content.",
+    description:
+      "A content research engine for creators. You describe your niche, your location, and the brand you are building. The AI then finds creators like you, scans the last 90 days of their output, and returns a ranked list of what actually went viral. Instead of scrolling for hours looking for inspiration, you get proven formats you can rebuild for your own audience.",
+    stack: ["AI", "CONTENT", "RESEARCH"],
+    year: "2025",
+    status: "LIVE",
+    statusLabel: "LIVE / INTERNAL USE",
     links: [],
   },
   {
@@ -136,7 +152,7 @@ export default function BuildList() {
                   className={`build-status build-status--${build.status.toLowerCase()}`}
                 >
                   <span className="build-status-dot" aria-hidden="true" />
-                  {build.status}
+                  {build.statusLabel ?? build.status}
                 </span>
                 <span className="build-year">{build.year}</span>
               </span>

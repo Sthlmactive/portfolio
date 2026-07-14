@@ -53,7 +53,7 @@ export default function Loader() {
       <span className="loader-mask">
         <span className="loader-line">Oskar Tang</span>
       </span>
-      <span className="loader-foot">Portfolio — 2026</span>
+      <span className="loader-foot">Portfolio · 2026</span>
     </div>
   );
 }

@@ -13,7 +13,7 @@ export default function BuildsPage() {
         <p className="builds-eyebrow">Selected work</p>
         <h1 className="builds-title">Builds</h1>
         <p className="builds-sub">
-          Products, tools, and experiments — shipped and in progress.
+          Products, tools, and experiments. Shipped and in progress.
         </p>
       </header>
 

@@ -53,7 +53,7 @@ const d = (seconds: number): DelayVar => ({ "--d": `${seconds}s` });
 const HEADLINE_LINES = ["Building,", "from Stockholm."];
 
 const PARAGRAPHS = [
-  "I'm 21. I've been freelancing since 17 — websites, automations, whatever needed building. A sales job taught me how to close, and how much companies overpay along the way. Then I started Sthlmactive, my network for CEOs under 30. Everywhere I looked, the same problem: companies overpaying on procurement, with no one handling it.",
+  "I'm 21. I've been freelancing since 17. Websites, automations, whatever needed building. A sales job taught me how to close, and how much companies overpay along the way. Then I started Sthlmactive, my network for CEOs under 30. Everywhere I looked, the same problem: companies overpaying on procurement, with no one handling it.",
   "So I built BackingNordics to fix it. Everything since has been in service of that. Early, fast, still figuring it out.",
 ];
 

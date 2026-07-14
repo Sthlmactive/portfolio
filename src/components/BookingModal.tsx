@@ -231,7 +231,7 @@ export default function BookingModal({
             </span>
             <h3 className="booking-title">Request sent</h3>
             <p className="booking-sub">
-              Thanks — I&apos;ve got it and I&apos;ll be in touch shortly.
+              Thanks. I&apos;ve got it and I&apos;ll be in touch shortly.
             </p>
           </div>
         ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 type DelayVar = CSSProperties & { "--d"?: string };
@@ -12,12 +13,13 @@ type Chapter = {
   status: string;
   year: string;
   link?: { href: string; text: string };
+  buildsCta?: boolean;
 };
 
 // Newest first.
 const CHAPTERS: Chapter[] = [
   {
-    index: "01 — 2026 → now",
+    index: "01 · 2026 → now",
     lines: ["BACKING", "NORDICS"],
     desc: "An AI procurement agent for Nordic SMEs. Making enterprise advantages available without being an enterprise.",
     status: "Live in production",
@@ -28,14 +30,14 @@ const CHAPTERS: Chapter[] = [
     },
   },
   {
-    index: "02 — 2026",
+    index: "02 · 2026",
     lines: ["GTM", "ENGINEER"],
     desc: "An AI sales platform that killed our admin work. It prospects, enriches, and runs outreach on autopilot, reading public market signals to reach companies the moment they're a fit.",
     status: "Live · Internal Use",
     year: "2026",
   },
   {
-    index: "03 — Since 2024",
+    index: "03 · Since 2024",
     lines: ["STHLMACTIVE"],
     desc: "A network for Sweden's CEOs and founders under 30. Where they meet, solve problems, and build together.",
     status: "Live",
@@ -46,18 +48,19 @@ const CHAPTERS: Chapter[] = [
     },
   },
   {
-    index: "04 — 2024",
+    index: "04 · 2024",
     lines: ["SALES"],
     desc: "B2B & B2C sales.",
     status: "B2B · B2C",
     year: "2024",
   },
   {
-    index: "05 — Since 2023",
+    index: "05 · Since 2023",
     lines: ["FREELANCE"],
-    desc: "Where it all started — websites, automations, whatever needed building.",
+    desc: "Where it all started. Websites, automations, whatever needed building.",
     status: "Self-taught",
     year: "2023",
+    buildsCta: true,
   },
 ];
 
@@ -244,6 +247,18 @@ export default function Timeline() {
                 <span className="tl-status-dot" aria-hidden="true" />
                 {ch.status}
               </p>
+              {ch.buildsCta && (
+                // Reveal wrapper keeps .reveal's transition off the link, so
+                // the link's own border-color hover transition stays intact.
+                <div className="reveal" style={d(0.61)}>
+                  <Link href="/builds" className="builds-link">
+                    <span>See all builds</span>
+                    <span className="builds-link-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </Link>
+                </div>
+              )}
             </article>
           ))}
         </div>

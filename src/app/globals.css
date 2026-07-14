@@ -531,6 +531,35 @@ body {
   border-bottom-color: var(--bone);
 }
 
+/* ---- "See all builds" — a text link in the FREELANCE chapter's text column,
+   left-aligned with the description and status above it. ---- */
+.builds-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bone);
+  text-decoration: none;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  transition: border-color 0.25s ease;
+}
+
+.builds-link:hover {
+  border-bottom-color: var(--bone);
+}
+
+.builds-link-arrow {
+  transition: transform 0.25s ease;
+}
+
+.builds-link:hover .builds-link-arrow {
+  transform: translateX(3px);
+}
+
 /* ---- Closer ---- */
 .story-closer {
   display: flex;
@@ -1830,35 +1859,18 @@ html.hero-revealed .fade-rise {
   font-size: clamp(10px, 0.9vw, 12px);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--muted);
+  color: var(--bone);
 }
 
 .build-status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--muted);
+  background: var(--bone);
   flex: none;
 }
 
-/* Monochrome status: brightness alone encodes state. */
-.build-status--live {
-  color: var(--bone);
-}
-.build-status--live .build-status-dot {
-  background: var(--bone);
-}
-
-.build-status--building .build-status-dot {
-  background: var(--muted);
-}
-
-.build-status--archived {
-  color: var(--muted);
-}
-.build-status--archived .build-status-dot {
-  background: rgba(242, 241, 236, 0.22);
-}
+/* Every status label and dot renders in full-opacity bone, matching LIVE. */
 
 .build-year {
   font-family: var(--font-space-mono), ui-monospace, monospace;
